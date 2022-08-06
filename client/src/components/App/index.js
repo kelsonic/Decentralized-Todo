@@ -75,7 +75,10 @@ function App() {
             <h2>
               <img alt="cross" src={cross} /> Wrong Network
             </h2>
-            <p>Please switch your wallet network to Goerli to use the app.</p>
+            <p>
+              Please switch your wallet network to{" "}
+              {process.env.REACT_APP_CHAIN_NAME} to use the app.
+            </p>
           </div>
         </div>
       )}
