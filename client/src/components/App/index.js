@@ -42,8 +42,6 @@ function App() {
       // Get all tasks.
       const tasks = await TaskContract.getTasks();
 
-      console.log("tasks", tasks);
-
       // Format the tasks.
       const formattedTasks = formatTasks(tasks);
 

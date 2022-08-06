@@ -81,7 +81,6 @@ const Tasks = ({ accounts, page, setTasks, tasks }) => {
 
       // Derive the task ID.
       const taskID = task?.id;
-      console.log("task", task);
 
       // Get the provider.
       const provider = new ethers.providers.Web3Provider(window.ethereum);
