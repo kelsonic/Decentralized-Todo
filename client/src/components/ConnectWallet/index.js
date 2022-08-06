@@ -3,13 +3,10 @@ import MetaMaskOnboarding from "@metamask/onboarding";
 import PropTypes from "prop-types";
 import { useCallback, useEffect } from "react";
 
-// Derive the constant values we need.
-export const CHAIN_ID = "0x5";
-
 // Derive the onboarding instance for MetaMask.
 const metaMaskOnboarding = new MetaMaskOnboarding();
 
-const ConnectWallet = ({ accounts, setAccounts }) => {
+const ConnectWallet = ({ accounts, setAccounts, setChain }) => {
   const registerEthereumListeners = useCallback(() => {
     if (!window.ethereum) {
       return;
@@ -26,12 +23,14 @@ const ConnectWallet = ({ accounts, setAccounts }) => {
     window.ethereum.on("chainChanged", async (chainId) => {
       console.info("chainChanged", chainId);
 
-      if (chainId !== CHAIN_ID) {
+      setChain(chainId);
+
+      if (chainId !== process.env.REACT_APP_CHAIN_ID) {
         await window.ethereum.request({
           method: "wallet_switchEthereumChain",
           params: [
             {
-              chainId: CHAIN_ID,
+              chainId: process.env.REACT_APP_CHAIN_ID,
             },
           ],
         });
@@ -42,13 +41,15 @@ const ConnectWallet = ({ accounts, setAccounts }) => {
     window.ethereum.on("connect", async (connectInfo) => {
       console.info("connect", connectInfo);
 
+      setChain(connectInfo.chainId);
+
       // Request to change to the correct chain.
-      if (connectInfo.chainId !== CHAIN_ID) {
+      if (connectInfo.chainId !== process.env.REACT_APP_CHAIN_ID) {
         await window.ethereum.request({
           method: "wallet_switchEthereumChain",
           params: [
             {
-              chainId: CHAIN_ID,
+              chainId: process.env.REACT_APP_CHAIN_ID,
             },
           ],
         });
@@ -66,8 +67,9 @@ const ConnectWallet = ({ accounts, setAccounts }) => {
       console.info("disconnect", disconnectInfo);
 
       setAccounts([]);
+      setChain(null);
     });
-  }, [setAccounts]);
+  }, [setAccounts, setChain]);
 
   useEffect(() => {
     registerEthereumListeners();
@@ -119,6 +121,7 @@ const ConnectWallet = ({ accounts, setAccounts }) => {
 ConnectWallet.propTypes = {
   accounts: PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,
   setAccounts: PropTypes.func.isRequired,
+  setChain: PropTypes.func.isRequired,
 };
 
 export default ConnectWallet;

@@ -7,6 +7,7 @@ import ConnectWallet from "../ConnectWallet";
 import CreateTask from "../CreateTask";
 import TASK_CONTRACT from "../../contracts/TaskContract.json";
 import Tasks from "../Tasks";
+import cross from "../../assets/cross.png";
 import { TASKS, TASKS_CREATE } from "./PAGES";
 import { TASK_CONTRACT_ADDRESS } from "../../contracts";
 import { Wrapper } from "./styles";
@@ -15,6 +16,7 @@ import { formatTasks } from "../../utils";
 function App() {
   // Derive the state we need.
   const [accounts, setAccounts] = useState([]);
+  const [chain, setChain] = useState(null);
   const [page, setPage] = useState(TASKS);
   const [tasks, setTasks] = useState([]);
 
@@ -60,7 +62,23 @@ function App() {
   return (
     <Wrapper>
       {/* Connect wallet button + flow. */}
-      <ConnectWallet accounts={accounts} setAccounts={setAccounts} />
+      <ConnectWallet
+        accounts={accounts}
+        setAccounts={setAccounts}
+        setChain={setChain}
+      />
+
+      {/* Chain warning. */}
+      {chain && chain !== process.env.REACT_APP_CHAIN_ID && (
+        <div className="chain-warning-background">
+          <div className="chain-warning">
+            <h2>
+              <img alt="cross" src={cross} /> Wrong Network
+            </h2>
+            <p>Please switch your wallet network to Goerli to use the app.</p>
+          </div>
+        </div>
+      )}
 
       {/* List Tasks page. */}
       {page === TASKS && (
