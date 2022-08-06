@@ -2,7 +2,9 @@
 
 The world's universal and decentralized TODO web app, built with Solidity + React.
 
-![App](./readme/app.mp4)
+<img alt="list todos" src="./image.png" height="500px" />
+<br /><br />
+<img alt="create todo" src="./image2.png" height="500px"  />
 
 ## Getting Started
 
